@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\DEV03\\Documents\\projects\\Tauri\\frontend-erp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\DEV03\\Documents\\projects\\Tauri\\frontend-erp\\src-tauri\\tauri.conf.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src-tauri\\tauri.conf.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\DEV03\\Documents\\projects\\Tauri\\frontend-erp\\src\\pages\\Paymant\\Paymant.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\Paymant\\Paymant.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Paymant.jsx",
+              "DocumentMoniker": "C:\\Users\\DEV03\\Documents\\projects\\Tauri\\frontend-erp\\src\\pages\\Paymant\\Paymant.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\Paymant\\Paymant.jsx",
+              "ToolTip": "C:\\Users\\DEV03\\Documents\\projects\\Tauri\\frontend-erp\\src\\pages\\Paymant\\Paymant.jsx",
+              "RelativeToolTip": "src\\pages\\Paymant\\Paymant.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-04-23T13:25:58.634Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "tauri.conf.json",
+              "DocumentMoniker": "C:\\Users\\DEV03\\Documents\\projects\\Tauri\\frontend-erp\\src-tauri\\tauri.conf.json",
+              "RelativeDocumentMoniker": "src-tauri\\tauri.conf.json",
+              "ToolTip": "C:\\Users\\DEV03\\Documents\\projects\\Tauri\\frontend-erp\\src-tauri\\tauri.conf.json",
+              "RelativeToolTip": "src-tauri\\tauri.conf.json",
+              "ViewState": "AgIAABYAAAAAAAAAAAAQwB4AAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-23T13:11:43.844Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

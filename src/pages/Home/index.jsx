@@ -1,14 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import rosto from "../../assets/image/rosto.png";
 import itemImg from "../../assets/image/item.png";
 import circulo from "../../assets/image/circulo.png";
 import bannerGraph from "../../assets/image/banner-graph.png";
 import useApi from "../../hooks/useApi";
 import { NavLink } from "react-router-dom";
-import { ProgressSpinner } from 'primereact/progressspinner';
+import { ProgressSpinner } from "primereact/progressspinner";
 import ProductCard from "../../components/ProductCard";
 
+const planosEstilos = {
+  ouro: {
+    backgroundColor: "#f8edba",
+    color: "#ffcc00",
+  },
+  prata: {
+    backgroundColor: "#d9d9d9",
+    color: "#808080",
+  },
+  bronze: {
+    backgroundColor: "#a78151",
+    color: "#613e0f",
+  },
+};
+
 const Home = () => {
+  const [plano, setPlano] = useState("");
   const {
     data: dataItems,
     error: errorItems,
@@ -17,8 +33,9 @@ const Home = () => {
   } = useApi("/Products/GetAll");
 
   useEffect(() => {
-    console.log(dataItems);
     requestAPIItems();
+    const roles = JSON.parse(localStorage.getItem("@Auth:roles")) ?? [];
+    setPlano(roles[0]);
   }, []);
 
   return (
@@ -70,19 +87,33 @@ const Home = () => {
         <section className="main-home--products">
           <h2 className="main-home--products__title">Produtos</h2>
           <div className="main-home--products__list">
-          {loadingItems ? (
-            <ProgressSpinner style={{width: '50px', height: '50px', color: '#fff', margin: 'auto'}}/>
-          ) : (
-            dataItems && dataItems.map((item) => (
-              <ProductCard key={item.id}
-              itemImg={itemImg}
-              itemTitle={item.name}
-              itemDesc={item.description}
-              itemCategory={item.category}
-              itemPrice={item.price}
+            {loadingItems ? (
+              <ProgressSpinner
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  color: "#fff",
+                  margin: "auto",
+                }}
               />
-            ))
-          )}
+            ) : dataItems ? (
+              dataItems.map((item) => (
+                <ProductCard
+                  key={item.id}
+                  itemImg={itemImg}
+                  itemTitle={item.name}
+                  itemDesc={item.description}
+                  itemCategory={item.category}
+                  itemPrice={item.price}
+                />
+              ))
+            ) : (
+              <div className="main-home--products__list__item--empty">
+                <span className="main-home--products__list__item--empty__text">
+                  Sem produtos cadastrados
+                </span>
+              </div>
+            )}
           </div>
         </section>
 
@@ -90,11 +121,25 @@ const Home = () => {
           <img className="main-home--graph__img-1" src={circulo} />
           <img className="main-home--graph__img-2" src={bannerGraph} />
         </section>
-        <section className="main-home--flat">
-          <p className="main-home--flat__text">Você é gold!</p>
+        <section
+          className="main-home--flat"
+          style={
+            plano === "Ouro"
+              ? planosEstilos.ouro
+              : plano === "Prata"
+              ? planosEstilos.prata
+              : planosEstilos.bronze
+          }
+          onClick={() => setPlano("Bronze")}
+        >
+          <p className="main-home--flat__text">
+            Você é {plano ? plano : "Bronze"}!
+          </p>
         </section>
         <section className="main-home--total">
-          <p className="main-home--total__text">Total de itens: 8999 itens</p>
+          <p className="main-home--total__text">
+            Total de itens: {dataItems ? dataItems.length : 0} itens
+          </p>
         </section>
       </main>
     </div>

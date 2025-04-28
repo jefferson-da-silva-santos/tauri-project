@@ -506,6 +506,7 @@ a {
   font-size: 1.3rem;
   font-weight: 700;
 }
+
 .container-payment .main-payment__flat:nth-child(1) {
   background-color: #f7ece1;
   color: #cd7f32;
@@ -547,6 +548,8 @@ a {
   box-shadow: 2px 2px 6px #cfcfcf;
   animation: goldEffect 5s infinite;
 }
+
+
 .container-payment .main-payment__flat:nth-child(3) .btn3 {
   background-color: #fae380;
   color: #c2a11e;
@@ -590,6 +593,9 @@ a {
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
+}
+.container-home .nav-home__list__item:hover {
+  background-color: #f3f5f7;
 }
 .container-home .nav-home__list__item i {
   font-size: 2rem;
@@ -688,7 +694,7 @@ a {
   gap: 0;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding-right: 3rem;
+  padding-right: 0rem;
   height: 19rem;
   /* A "alça" que você arrasta */
   /* A parte de fundo da barra */
@@ -865,9 +871,7 @@ a {
   width: 28rem;
 }
 .container-home .main-home--flat {
-  background-color: #f6eab7;
   background-image: linear-gradient(to top left);
-  border: 1px solid rgba(255, 204, 0, 0.1921568627);
   box-shadow: 2px 2px 6px #e9e6e6;
   border-radius: 26px;
   margin-bottom: 2rem;
@@ -876,7 +880,6 @@ a {
   justify-content: center;
   align-items: center;
   gap: 0;
-  color: #ffcc00;
   text-transform: uppercase;
   font-size: 3rem;
   font-weight: 900;

@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import ongoldClient3 from "../../assets/image/ongold-cli3.png";
 import useApi from "../../hooks/useApi";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
@@ -19,35 +18,49 @@ const LoginEmail = () => {
     email: Yup.string().required("O email é obrigatório"),
   });
 
+  const userId = localStorage.getItem("@Auth:idUser");
+  const token = localStorage.getItem("@Confirm:tokenEmailConfirm");
+  const encodedToken = encodeURIComponent(token);
+
   const {
-    data: loginData,
-    error: loginError,
-    loading: loginLoading,
-    requestAPI, // Renomeei para ficar mais genérico
-  } = useApi(
-    `/Auth/confirm-email` // Apenas o caminho base
-  );
+    data: confirmEmailData,
+    error: confirmEmailError,
+    loading: confirmEmailLoading,
+    requestAPI: requestConfirmEmail, 
+  } = useApi(`/Auth/confirm-email?userId=${userId}&token=${encodedToken}`);
 
   const handleSubmit = async (values) => {
-    const emailFormat = values.email + "@gmail.com";
-    const userId = localStorage.getItem("@Auth:idUser");
-    const token = localStorage.getItem("@Confirm:tokenEmailConfirm");
+    const email = values.email + "@gmail.com";
+    try {
+      const response = await requestConfirmEmail();
 
-    if (userId && token) {
-      const fullEndpoint = `/Auth/confirm-email?userId=${userId}&token=${token}`;
-      try {
-        const response = await requestAPI(fullEndpoint); // Passe a URL completa aqui
-        console.log(response);
-        // Lógica de sucesso aqui (ex: navigate para outra página, mostrar notificação)
-      } catch (error) {
-        console.log(error);
-        // Lógica de erro aqui (ex: mostrar notificação de erro)
+      if (confirmEmailError) {
+        noty.error("Houve um erro ao confirmar o e-mail.");
+        return;
       }
-    } else {
-      console.error("UserId ou Token não encontrados no localStorage.");
-      // Lidar com o caso em que userId ou token não estão disponíveis
-      noty.show({ severity: 'error', summary: 'Erro', detail: 'UserId ou Token não encontrados.', life: 3000 });
+
+      if (email !== localStorage.getItem("@Auth:email")) {
+        noty.error("Houve um erro ao confirmar o e-mail.");
+        return;
+      }
+
+      if (String(response) === "E-mail confirmado com sucesso.") {
+        noty.success(String(response));
+        navigate("/payment");
+        return;
+      }
+
+      noty.error("Houve um erro ao confirmar o e-mail.");
+
+    } catch (error) {
+      if (error && error.status === 400) {
+        noty.error("Houve um erro ao confirmar o e-mail.");
+      }
+      if (error && error.status === 500) {
+        noty.error("Houve um erro inesperado, tente novamente mais tarde");
+      }
     }
+  
   };
 
   return (
@@ -84,39 +97,47 @@ const LoginEmail = () => {
                   realmente aconteça
                 </p>
 
-                <div className="group" style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gridTemplateRows: '1rem 1rem'
-                }}>
-                    <Field
-                      type="text"
-                      id="email"
-                      name="email"
-                      className="main-login--primary__form--input"
-                      style={{
-                        backgroundColor: "#DDDDDD",
-                        height: "30px",
-                        width: "180px",
-                        borderRadius: "3px",
-                        marginRight: "0px",
-                        fontSize: "1.3rem",
-                        transition: "all 0.5s ease",
-                        marginBottom: "0",
-                      }}
-                    />
-                    <span
-                      className="text-email"
-                      style={{
-                        color: "#0042FF",
-                        fontSize: "1.3rem",
-                        textDecoration: "underline",
-                        fontWeight: "600",
-                      }}
-                    >
-                      @gmail.com
-                    </span>
-                  <ErrorMessage name="email" style={{ bottom: "-9px" }} component="div" className="error"/>
+                <div
+                  className="group"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gridTemplateRows: "1rem 1rem",
+                  }}
+                >
+                  <Field
+                    type="text"
+                    id="email"
+                    name="email"
+                    className="main-login--primary__form--input"
+                    style={{
+                      backgroundColor: "#DDDDDD",
+                      height: "30px",
+                      width: "180px",
+                      borderRadius: "3px",
+                      marginRight: "0px",
+                      fontSize: "1.3rem",
+                      transition: "all 0.5s ease",
+                      marginBottom: "0",
+                    }}
+                  />
+                  <span
+                    className="text-email"
+                    style={{
+                      color: "#0042FF",
+                      fontSize: "1.3rem",
+                      textDecoration: "underline",
+                      fontWeight: "600",
+                    }}
+                  >
+                    @gmail.com
+                  </span>
+                  <ErrorMessage
+                    name="email"
+                    style={{ bottom: "-9px" }}
+                    component="div"
+                    className="error"
+                  />
                 </div>
 
                 <button
@@ -126,7 +147,7 @@ const LoginEmail = () => {
                     fontWeight: "600",
                   }}
                 >
-                  {loginLoading ? (
+                  {confirmEmailLoading ? (
                     <ProgressSpinner
                       style={{ width: "20px", height: "20px", color: "#fff" }}
                     />

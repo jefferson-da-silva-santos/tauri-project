@@ -20,7 +20,7 @@ const Register = () => {
     password: "",
     telefone: "",
     cpf: "",
-    dataNascimento: null, // Inicialize como null para o Calendar
+    dataNascimento: null, 
   };
 
   const validationSchema = shemaRegister;
@@ -38,9 +38,9 @@ const Register = () => {
 
       if (response.sucess) {
         noty.success(response.message);
-        console.log(response);
         localStorage.setItem("@Auth:idUser", response.id);
         localStorage.setItem('@Auth:email', values.email);
+        localStorage.setItem('@Auth:password', values.password)
         localStorage.setItem("@Confirm:tokenEmailConfirm", response.tokenConfirmEmail);
         navigate("/confirmEmail");
         return;

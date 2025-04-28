@@ -7,6 +7,7 @@ import { useNavigate} from 'react-router-dom';
 import NotyContext from '../../context/NotyContext';
 import { shemaLogin } from '../../utils/validate/shemaLogin';
 
+
 const Login = () => {
   const navigate = useNavigate();
   const noty = useContext(NotyContext);
@@ -26,11 +27,14 @@ const Login = () => {
 
   const requestLogin = async (values) => {
     try {
-      const token = await loginRequestAPI(values);
+      const response = await loginRequestAPI(values);
+      console.log(loginData);
 
-      if (token) {
-        localStorage.setItem('@Auth:token', token);
-        localStorage.setItem('@Auth:TokenExpiration', new Date().getTime() + 60 * 60 * 1000); 
+      if (response.token) {
+        localStorage.setItem('@Auth:token', response.token);
+        localStorage.setItem('@Auth:user', JSON.stringify(response.user));
+        localStorage.setItem('@Auth:roles', JSON.stringify(response.roles));
+        localStorage.setItem('@Auth:TokenExpiration', new Date().getTime() + 60 * 60 * 1000);
         noty.success('Login realizado com sucesso');
         navigate('/home');
       }

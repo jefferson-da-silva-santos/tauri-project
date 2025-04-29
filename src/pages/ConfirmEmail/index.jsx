@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import useApi from "../../hooks/useApi";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -9,6 +9,26 @@ import * as Yup from "yup";
 const LoginEmail = () => {
   const navigate = useNavigate();
   const noty = useContext(NotyContext);
+  
+  const [signedIn, setSignedIn] = useState(false);
+  const [existisToken, setExistisToken] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem('@Auth:user')) {
+      setSignedIn(true);
+    }
+    if (localStorage.getItem('@Confirm:tokenEmailConfirm')) {
+      setExistisToken(true);
+    }
+  }, []);
+
+  if (signedIn) {
+    navigate('/home');
+  }
+
+  if (!existisToken) {
+    navigate('/register');
+  }
 
   const initialValues = {
     email: "",

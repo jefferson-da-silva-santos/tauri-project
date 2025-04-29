@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import rosto from "../../assets/image/rosto.png";
 import itemImg from "../../assets/image/item.png";
 import circulo from "../../assets/image/circulo.png";
 import bannerGraph from "../../assets/image/banner-graph.png";
 import useApi from "../../hooks/useApi";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 import ProductCard from "../../components/ProductCard";
+import NotyContext from "../../context/NotyContext";
 
 const planosEstilos = {
   ouro: {
@@ -24,6 +25,20 @@ const planosEstilos = {
 };
 
 const Home = () => {
+  const navigate = useNavigate();
+  const [signedIn, setSignedIn] = useState(false);
+  const noty = useContext(NotyContext);
+
+  if (!signedIn) {
+    navigate("/login");
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem("@Auth:user")) {
+      setSignedIn(true);
+    }
+  }, []);
+
   const [plano, setPlano] = useState("");
   const [dataUser, setDataUser] = useState({});
   const {
@@ -39,6 +54,16 @@ const Home = () => {
     setPlano(roles[0]);
     setDataUser(JSON.parse(localStorage.getItem("@Auth:user")));
   }, []);
+
+  const logout = async () => {
+    localStorage.removeItem("@Auth:user");
+    localStorage.removeItem("@Auth:roles");
+    localStorage.removeItem("@Auth:token");
+    localStorage.removeItem("@Auth:TokenExpiration");
+    noty.success("Sua sessão expirou!");
+    navigate("/login");
+    setSignedIn(false);
+  }
 
   return (
     <div className="container-home">
@@ -62,11 +87,14 @@ const Home = () => {
           <li className="nav-home__list__item">
             <i className="bx bxs-report"></i>
           </li>
-          <NavLink to="/login">
+          <a onClick={e => {
+            e.preventDefault();
+            logout();
+          }}>
             <li className="nav-home__list__item">
               <i className="bx bx-exit bx-rotate-180"></i>
             </li>
-          </NavLink>
+          </a>
         </ul>
       </nav>
 
@@ -132,10 +160,10 @@ const Home = () => {
               ? planosEstilos.prata
               : planosEstilos.bronze
           }
-          onClick={() => setPlano("Bronze")}
+          
         >
           <p className="main-home--flat__text">
-            Você é {plano ? plano : "Bronze"}!
+            Você é {plano ? plano : "Desconhecido"}!
           </p>
         </section>
         <section className="main-home--total">

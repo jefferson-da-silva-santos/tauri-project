@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import ongoldClient3 from '../../assets/image/ongold-cli3.png';
 import useApi from '../../hooks/useApi';
@@ -9,8 +9,19 @@ import { shemaLogin } from '../../utils/validate/shemaLogin';
 
 
 const Login = () => {
-  const navigate = useNavigate();
   const noty = useContext(NotyContext);
+  const navigate = useNavigate();
+  const [signedIn, setSignedIn] = React.useState(false);
+  useEffect(() => {
+    if (localStorage.getItem('@Auth:user')) {
+      setSignedIn(true);
+    }
+  });
+
+  if (signedIn) {
+    navigate('/home');
+  }
+
   const initialValues = {
     email: '',
     password: '',

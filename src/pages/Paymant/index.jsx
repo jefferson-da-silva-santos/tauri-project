@@ -32,20 +32,6 @@ const Paymant = () => {
         return;
       }
 
-      const responseTicket = await axios.post(
-        `/api/Ticket/GerarBoleto`,
-        {}, // Envie um objeto vazio ou os dados necessários no corpo da requisição
-        {
-          responseType: 'blob',
-        }
-      );
-  
-      const blob = new Blob([responseTicket.data], { type: 'application/pdf' });
-      saveAs(blob, 'boleto.pdf');
-  
-      console.log('Download do boleto iniciado com sucesso com Axios!');
-      console.log(responseTicket); 
-
       const dataLogin = {
         email: localStorage.getItem("@Auth:email"),
         password: localStorage.getItem("@Auth:password"),
@@ -58,10 +44,6 @@ const Paymant = () => {
         return;
       }
 
-      
-
-      console.log(responseTicket);
-/*
       // Removendo dados do localstorage
       localStorage.removeItem("@Auth:email");
       localStorage.removeItem("@Auth:idUser");
@@ -77,8 +59,8 @@ const Paymant = () => {
       );
 
       noty.success("Pagamento efetuado com sucesso!");
-      // navigate("/");
-      */
+      navigate("/");
+
     } catch (error) {
       // Tratamento de erros
       if (error && (error.status === 400 || error.status === 404)) {

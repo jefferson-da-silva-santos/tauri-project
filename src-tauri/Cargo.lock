@@ -1001,7 +1001,7 @@ dependencies = [
 
 [[package]]
 name = "frontend-erp"
-version = "0.1.0"
+version = "9.9.0"
 dependencies = [
  "serde",
  "serde_json",

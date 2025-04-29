@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import ongoldClient1 from "../../assets/image/ongold-cli.png";
 import ongoldClient2 from "../../assets/image/ongold-cli2.png";
@@ -14,6 +14,16 @@ import { ProgressSpinner } from "primereact/progressspinner";
 const Register = () => {
   const noty = useContext(NotyContext);
   const navigate = useNavigate();
+  const [signedIn, setSignedIn] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem('@Auth:user')) {
+      setSignedIn(true);
+    }
+  });
+
+  if (signedIn) {
+    navigate('/home');
+  }
   const initialValues = {
     nome: "",
     email: "",

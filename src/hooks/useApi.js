@@ -1,17 +1,17 @@
 import { useState } from "react";
 import api from "../api/api";
 
-const useApi = (endpoint, method = "GET") => {
+const useApi = (endpoint = null, method = "GET") => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const requestAPI = async (requestBody = null) => {
+  const requestAPI = async (requestBody = null, end = endpoint ) => {
     setLoading(true);
     try {
       const config = {
         method,
-        url: endpoint,
+        url: endpoint ? endpoint : end,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("@Auth:token")}`,
         },

@@ -25,6 +25,7 @@ const planosEstilos = {
 
 const Home = () => {
   const [plano, setPlano] = useState("");
+  const [dataUser, setDataUser] = useState({});
   const {
     data: dataItems,
     error: errorItems,
@@ -36,6 +37,7 @@ const Home = () => {
     requestAPIItems();
     const roles = JSON.parse(localStorage.getItem("@Auth:roles")) ?? [];
     setPlano(roles[0]);
+    setDataUser(JSON.parse(localStorage.getItem("@Auth:user")));
   }, []);
 
   return (
@@ -70,7 +72,7 @@ const Home = () => {
 
       <header className="header-home">
         <h1 className="header-home__title">
-          Bem Vindo, <span>User!</span>
+          Bem Vindo, <span>{dataUser.userName}!</span>
         </h1>
         <div className="header-home__group">
           <button className="header-home__button">
@@ -78,7 +80,7 @@ const Home = () => {
           </button>
           <div className="header-home__user">
             <img className="header-home__img" src={rosto} alt="" />
-            <span className="header-home__name">Username</span>
+            <span className="header-home__name">{dataUser.userName}</span>
           </div>
         </div>
       </header>

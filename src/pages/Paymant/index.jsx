@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import useApi from "../../hooks/useApi";
 import NotyContext from "../../context/NotyContext";
 import { useNavigate } from "react-router-dom";
-
+import { ProgressSpinner } from "primereact/progressspinner";
+import axios from "axios";
 const Paymant = () => {
   const noty = useContext(NotyContext);
   const navigate = useNavigate();
@@ -12,19 +13,72 @@ const Paymant = () => {
     "POST"
   );
 
+  const {
+    data: dataLogin,
+    loading: loadingLogin,
+    requestAPI: requestAPILogin,
+  } = useApi(null, "POST");
+
   const handleClick = async (selectedPlano) => {
     try {
       const url = `/Pay/confirm-payment-plan?Id=${localStorage.getItem(
         "@Auth:idUser"
       )}&level=${selectedPlano}`;
+
       const response = await requestAPIPayment(null, url);
 
       if (!response) {
         noty.error("Erro ao efetuar pagamento!");
         return;
       }
+
+      const responseTicket = await axios.post(
+        `/api/Ticket/GerarBoleto`,
+        {}, // Envie um objeto vazio ou os dados necessários no corpo da requisição
+        {
+          responseType: 'blob',
+        }
+      );
+  
+      const blob = new Blob([responseTicket.data], { type: 'application/pdf' });
+      saveAs(blob, 'boleto.pdf');
+  
+      console.log('Download do boleto iniciado com sucesso com Axios!');
+      console.log(responseTicket); 
+
+      const dataLogin = {
+        email: localStorage.getItem("@Auth:email"),
+        password: localStorage.getItem("@Auth:password"),
+      };
+
+      const responseLogin = await requestAPILogin(dataLogin, "/Auth/login");
+
+      if (!responseLogin) {
+        noty.error("Erro ao efetuar pagamento!");
+        return;
+      }
+
+      
+
+      console.log(responseTicket);
+/*
+      // Removendo dados do localstorage
+      localStorage.removeItem("@Auth:email");
+      localStorage.removeItem("@Auth:idUser");
+      localStorage.removeItem("@Auth:password");
+      localStorage.removeItem("@Confirm:tokenEmailConfirm");
+      // Adicionando dados do localstorage
+      localStorage.setItem("@Auth:token", responseLogin.token);
+      localStorage.setItem("@Auth:user", JSON.stringify(responseLogin.user));
+      localStorage.setItem("@Auth:roles", JSON.stringify(responseLogin.roles));
+      localStorage.setItem(
+        "@Auth:TokenExpiration",
+        new Date().getTime() + 60 * 60 * 1000
+      );
+
       noty.success("Pagamento efetuado com sucesso!");
-      navigate("/");
+      // navigate("/");
+      */
     } catch (error) {
       // Tratamento de erros
       if (error && (error.status === 400 || error.status === 404)) {
@@ -38,6 +92,14 @@ const Paymant = () => {
 
   return (
     <div className="container-payment">
+      <div
+        className="loading-payment"
+        style={{ display: loadingPayment ? "flex" : "none" }}
+      >
+        <ProgressSpinner
+          style={{ width: "60px", height: "60px", color: "#fff" }}
+        />
+      </div>
       <header className="header-payment">
         <h1 className="header-payment__title">Esculha o seu plano</h1>
       </header>

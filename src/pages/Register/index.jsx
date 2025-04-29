@@ -12,12 +12,6 @@ import { formatarMensagemDeErro } from "../../utils/formatt/formatErrorMensager"
 import { ProgressSpinner } from "primereact/progressspinner";
 
 const Register = () => {
-  // Excluindo dados do local storage
-  localStorage.removeItem("@Auth:idUser");
-  localStorage.removeItem("@Auth:email");
-  localStorage.removeItem("@Auth:password");
-  localStorage.removeItem("@Confirm:tokenEmailConfirm");
-
   const noty = useContext(NotyContext);
   const navigate = useNavigate();
   const initialValues = {
@@ -26,7 +20,7 @@ const Register = () => {
     password: "",
     telefone: "",
     cpf: "",
-    dataNascimento: null,
+    dataNascimento: null, 
   };
   const validationSchema = shemaRegister;
   const {
@@ -43,12 +37,9 @@ const Register = () => {
       if (response.sucess) {
         noty.success(response.message);
         localStorage.setItem("@Auth:idUser", response.id);
-        localStorage.setItem("@Auth:email", values.email);
-        localStorage.setItem("@Auth:password", values.password);
-        localStorage.setItem(
-          "@Confirm:tokenEmailConfirm",
-          response.tokenConfirmEmail
-        );
+        localStorage.setItem('@Auth:email', values.email);
+        localStorage.setItem('@Auth:password', values.password)
+        localStorage.setItem("@Confirm:tokenEmailConfirm", response.tokenConfirmEmail);
         navigate("/confirmEmail");
         return;
       }

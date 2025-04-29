@@ -8,6 +8,26 @@
   padding: 0;
 }
 
+@keyframes loading {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.loading-payment {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  background-color: transparent;
+  position: fixed;
+  animation: loading 1s ease 0s 1 normal forwards;
+}
+
 @keyframes goldEffect {
   0% {
     transform: scale(100%);

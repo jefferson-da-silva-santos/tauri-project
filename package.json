@@ -13,6 +13,8 @@
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
     "axios": "^1.8.4",
+    "edge-js": "^23.1.9",
+    "file-saver": "^2.0.5",
     "formik": "^2.4.6",
     "notyf": "^3.10.0",
     "primereact": "^10.9.4",

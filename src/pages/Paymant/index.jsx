@@ -3,7 +3,6 @@ import useApi from "../../hooks/useApi";
 import NotyContext from "../../context/NotyContext";
 import { useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
-import axios from "axios";
 const Paymant = () => {
   const noty = useContext(NotyContext);
   const navigate = useNavigate();
@@ -44,6 +43,7 @@ const Paymant = () => {
         return;
       }
 
+  
       // Removendo dados do localstorage
       localStorage.removeItem("@Auth:email");
       localStorage.removeItem("@Auth:idUser");

@@ -8,6 +8,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 import ProductCard from "../../components/ProductCard";
 import NotyContext from "../../context/NotyContext";
+import DownloadTicketButton from "../../components/DownloadTicketButton";
 
 const planosEstilos = {
   ouro: {
@@ -85,7 +86,7 @@ const Home = () => {
             </li>
           </NavLink>
           <li className="nav-home__list__item">
-            <i className="bx bxs-report"></i>
+            <DownloadTicketButton />
           </li>
           <a onClick={e => {
             e.preventDefault();

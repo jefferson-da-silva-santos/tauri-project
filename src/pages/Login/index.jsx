@@ -79,10 +79,10 @@ const Login = () => {
         <section className="main-login--primary">
           <Formik
             initialValues={initialValues}
-            validationSchema={validationSchema} // Adicione o schema de validação
+            validationSchema={validationSchema} 
             onSubmit={handleSubmit}
           >
-            {({ errors, touched }) => ( // Obtenha acesso a erros e campos tocados
+            {({ errors, touched }) => ( 
               <Form className="main-login--primary__form" method="post">
                 <h2 className="main-login--primary__form--title">
                   Faça login
@@ -94,13 +94,13 @@ const Login = () => {
                 <div className="group">
                   <label htmlFor="email">Email</label>
                   <Field type="email" id="email" name="email" />
-                  <ErrorMessage name="email" component="div" className="error" /> {/* Exibe mensagens de erro para o email */}
+                  <ErrorMessage name="email" component="div" className="error" /> 
                 </div>
 
                 <div className="group">
                   <label htmlFor="password">Senha</label>
                   <Field type="password" id="password" name="password" />
-                  <ErrorMessage name="password" component="div" className="error" /> {/* Exibe mensagens de erro para a senha */}
+                  <ErrorMessage name="password" component="div" className="error" /> 
                 </div>
 
                 <button

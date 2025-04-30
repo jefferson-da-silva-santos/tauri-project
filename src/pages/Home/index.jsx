@@ -86,7 +86,7 @@ const Home = () => {
             </li>
           </NavLink>
           <li className="nav-home__list__item">
-            <DownloadTicketButton />
+            <i className="bx bxs-report"></i>
           </li>
           <a onClick={e => {
             e.preventDefault();

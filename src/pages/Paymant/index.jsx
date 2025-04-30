@@ -1,11 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import useApi from "../../hooks/useApi";
 import NotyContext from "../../context/NotyContext";
 import { useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
+import DownloadTicketButton from "../../components/DownloadTicketButton";
 const Paymant = () => {
   const noty = useContext(NotyContext);
   const navigate = useNavigate();
+  const [isPaymentFinished, setIsPaymentFinished] = useState(false);
 
   const { loading: loadingPayment, requestAPI: requestAPIPayment } = useApi(
     null,
@@ -58,8 +60,9 @@ const Paymant = () => {
         new Date().getTime() + 60 * 60 * 1000
       );
 
-      noty.success("Pagamento efetuado com sucesso!");
-      navigate("/");
+      noty.success("Pagamento efetuado com sucesso! Seu boleto está disponivel para download.");
+      setIsPaymentFinished(true);
+      // navigate("/");
 
     } catch (error) {
       // Tratamento de erros
@@ -74,6 +77,9 @@ const Paymant = () => {
 
   return (
     <div className="container-payment">
+      {isPaymentFinished && (
+        <DownloadTicketButton redirect={true} route="/"/>
+      )}
       <div
         className="loading-payment"
         style={{ display: loadingPayment ? "flex" : "none" }}

@@ -28,6 +28,25 @@
   animation: loading 1s ease 0s 1 normal forwards;
 }
 
+.button-download-ticket {
+  position: fixed;
+  right: 0;
+  top: 0;
+  margin: 1rem;
+  border: none;
+  background-color: transparent;
+  width: 55px;
+  height: 55px;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 3px solid #FF9F00;
+}
+
+i {
+  font-size: 2.5rem;
+  color: #FF9F00;
+}
+
 @keyframes goldEffect {
   0% {
     transform: scale(100%);

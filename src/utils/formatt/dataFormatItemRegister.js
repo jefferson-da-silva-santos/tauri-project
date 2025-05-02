@@ -1,0 +1,10 @@
+export const formatDataItemRegister = (data) => {
+  return {
+    name: data.nome,
+    description: data.descricao,
+    category: data.categoria,
+    price: data.preco,
+    quantity: data.quantidade,
+    unity: data.unidade
+  }
+}

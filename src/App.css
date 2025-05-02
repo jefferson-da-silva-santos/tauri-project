@@ -17,6 +17,24 @@
   }
 }
 
+#categoria,
+#unidade {
+  padding: .7rem;
+}
+
+*::placeholder {
+  color: #c4c4c4;
+}
+
+.p-button {
+  background: #ff9400;
+  border: none;
+}
+
+.p-dropdown-item {
+  padding: .7rem;
+}
+
 .loading-payment {
   width: 100%;
   display: flex;

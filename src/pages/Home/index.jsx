@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import rosto from "../../assets/image/rosto.png";
 import itemImg from "../../assets/image/item.png";
 import circulo from "../../assets/image/circulo.png";
@@ -7,8 +7,8 @@ import useApi from "../../hooks/useApi";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 import ProductCard from "../../components/ProductCard";
-import NotyContext from "../../context/NotyContext";
-import DownloadTicketButton from "../../components/DownloadTicketButton";
+import useReport from "../../hooks/useReport";
+import useNoty from "../../hooks/useNoty";
 
 const planosEstilos = {
   ouro: {
@@ -28,7 +28,9 @@ const planosEstilos = {
 const Home = () => {
   const navigate = useNavigate();
   const [signedIn, setSignedIn] = useState(false);
-  const noty = useContext(NotyContext);
+  const noty = useNoty();
+
+  const { loading: loadingReport, requestReport } = useReport();
 
   if (!signedIn) {
     navigate("/login");
@@ -64,7 +66,7 @@ const Home = () => {
     noty.success("Sua sessão expirou!");
     navigate("/login");
     setSignedIn(false);
-  }
+  };
 
   return (
     <div className="container-home">
@@ -85,13 +87,26 @@ const Home = () => {
               <i className="bx bxs-edit-alt"></i>
             </li>
           </NavLink>
-          <li className="nav-home__list__item">
-            <i className="bx bxs-report"></i>
+          <li onClick={requestReport} className="nav-home__list__item">
+            {loadingReport ? (
+              <ProgressSpinner
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  color: "#fff",
+                  margin: "auto",
+                }}
+              />
+            ) : (
+              <i className="bx bxs-report"></i>
+            )}
           </li>
-          <a onClick={e => {
-            e.preventDefault();
-            logout();
-          }}>
+          <a
+            onClick={(e) => {
+              e.preventDefault();
+              logout();
+            }}
+          >
             <li className="nav-home__list__item">
               <i className="bx bx-exit bx-rotate-180"></i>
             </li>
@@ -161,7 +176,6 @@ const Home = () => {
               ? planosEstilos.prata
               : planosEstilos.bronze
           }
-          
         >
           <p className="main-home--flat__text">
             Você é {plano ? plano : "Desconhecido"}!

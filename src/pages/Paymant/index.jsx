@@ -1,12 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, {useState } from "react";
 import useApi from "../../hooks/useApi";
-import NotyContext from "../../context/NotyContext";
-import { useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 import DownloadTicketButton from "../../components/DownloadTicketButton";
+import useNoty from "../../hooks/useNoty";
 const Paymant = () => {
-  const noty = useContext(NotyContext);
-  const navigate = useNavigate();
+  const noty = useNoty();
   const [isPaymentFinished, setIsPaymentFinished] = useState(false);
 
   const { loading: loadingPayment, requestAPI: requestAPIPayment } = useApi(

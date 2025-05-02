@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import NotyContext from "./NotyContext";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { User } from "./types";
 import { AuthContext } from "./AuthContext";
 import React from "react";
+import useNoty from "../hooks/useNoty";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   const [loadingSignIn, setLoadingSignIn] = useState(false);
-  const notyf = useContext(NotyContext);
+  const noty = useNoty();
 
   const loadingStoreData = () => {
     const storedUser = localStorage.getItem("@Auth:user") || "";
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
       setUser(JSON.parse(storedUser ? storedUser : ""));
       return;
     }
-    notyf.error("Sua sessão expirou!");
+    noty.error("Sua sessão expirou!");
     signOut();
   };
 
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
           expirationDate.toISOString()
         );
       }
-      notyf.success(data.message);
+      noty.success(data.message);
       setUser(data.user);
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
       setTimeout(() => {
@@ -59,18 +59,18 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       if (error.response) {
         if (error.response.status !== 401) {
-          notyf.error(
+          noty.error(
             "Ocorreu um erro inesperado. Tente novamente mais tarde."
           );
           return;
         }
-        notyf.error(error.response.data.message);
+        noty.error(error.response.data.message);
       } else if (error.request) {
-        notyf.error(
+        noty.error(
           "Não foi possível conectar ao servidor. Verifique sua conexão."
         );
       } else {
-        notyf.error("Ocorreu um erro inesperado. Tente novamente mais tarde.");
+        noty.error("Ocorreu um erro inesperado. Tente novamente mais tarde.");
         console.error("Erro Axios:", error);
       }
     } finally {

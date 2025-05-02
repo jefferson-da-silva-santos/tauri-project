@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import ongoldClient1 from "../../assets/image/ongold-cli.png";
 import ongoldClient2 from "../../assets/image/ongold-cli2.png";
 import PrimeReactCalendar from "../../components/PrimeReactCalendar";
 import { useNavigate } from "react-router-dom";
 import useApi from "../../hooks/useApi";
-import NotyContext from "../../context/NotyContext";
 import { formatDataRegister } from "../../utils/formatt/formatDataRegister";
 import { shemaRegister } from "../../utils/validate/shemaRegister";
 import { formatarMensagemDeErro } from "../../utils/formatt/formatErrorMensager";
 import { ProgressSpinner } from "primereact/progressspinner";
+import useNoty from "../../hooks/useNoty";
 
 const Register = () => {
-  const noty = useContext(NotyContext);
+  const noty = useNoty();
   const navigate = useNavigate();
   const [signedIn, setSignedIn] = useState(false);
   useEffect(() => {

@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import useApi from "../../hooks/useApi";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
-import NotyContext from "../../context/NotyContext";
 import * as Yup from "yup";
+import useNoty from "../../hooks/useNoty";
 
 const LoginEmail = () => {
   const navigate = useNavigate();
-  const noty = useContext(NotyContext);
+  const noty = useNoty();
   
   const [signedIn, setSignedIn] = useState(false);
   const [existisToken, setExistisToken] = useState(false);

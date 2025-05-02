@@ -1,15 +1,15 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import ongoldClient3 from '../../assets/image/ongold-cli3.png';
 import useApi from '../../hooks/useApi';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useNavigate} from 'react-router-dom';
-import NotyContext from '../../context/NotyContext';
 import { shemaLogin } from '../../utils/validate/shemaLogin';
+import useNoty from '../../hooks/useNoty';
 
 
 const Login = () => {
-  const noty = useContext(NotyContext);
+  const noty = useNoty();
   const navigate = useNavigate();
   const [signedIn, setSignedIn] = React.useState(false);
   useEffect(() => {

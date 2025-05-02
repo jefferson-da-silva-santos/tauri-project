@@ -1,21 +1,21 @@
 import React, { useContext, useState } from "react";
-import axios from "axios";
 import { saveAs } from "file-saver";
-import NotyContext from "../../context/NotyContext";
-import useApi from "../../hooks/useApi";
 import { useNavigate } from "react-router-dom";
+import api from "../../api/api";
+import useNoty from "../../hooks/useNoty";
 
 const DownloadTicketButton = ({ redirect = false, route = "" }) => {
-  const noty = useContext(NotyContext);
+  const noty = useNoty();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
-  const { requestAPI: requestTicket } = useApi(null, "POST");
 
   const handleDownload = async () => {
     try {
       setLoading(true);
-      const response = await requestTicket(null, "/Ticket/GerarBoleto");
+      // const response = await requestTicket(null, "/Ticket/GerarBoleto");
+      const response = await api.post("/Ticket/GerarBoleto", null, {
+        responseType: 'blob'
+      });
 
       if (!response) {
         noty.error("Erro na geração do boleto!");

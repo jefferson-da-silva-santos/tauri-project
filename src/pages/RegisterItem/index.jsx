@@ -90,7 +90,7 @@ const RegisterItem = () => {
   return (
     <div className="container-register-item">
       <button className="btn-back" onClick={() => navigate("/")}>
-        <i class="bx bx-left-arrow-alt" style={{ color: "#FFFFFF" }}></i>
+        <i className="bx bx-left-arrow-alt" style={{ color: "#FFFFFF" }}></i>
       </button>
 
       <div className="container-register-item__card-form">

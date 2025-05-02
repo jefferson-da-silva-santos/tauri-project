@@ -58,25 +58,27 @@ const EditItem = () => {
       unidade: Yup.string().required("Unidade é obrigatória"),
     }),
     onSubmit: async (values, { resetForm }) => {
-      // console.log("Dados para editar:", values);
+      console.log("Entrou na função de submissão");
       try {
         setLoadingEditItem(true);
         const data = formatDataItemRegister(values);
         console.log("Data para editar:", data);
-        ("");
-        const response = api.put(`/Products/Update?id=${values.id}`, data);
+        const response = await api.put(
+          `/Products/Update?id=${values.id}`,
+          data
+        );
 
         if (response) {
           noty.success("Item editado com sucesso!");
           resetForm();
         }
       } catch (error) {
-        if (error.status >= 500 && error.status < 600) {
+        if (error.response?.status >= 500 && error.response?.status < 600) {
           noty.error("Ocorreu um erro inesperado.");
         }
 
-        if (error.status >= 400 && error.status < 500) {
-          noty.error("Ocorreu um erro ao cadastrar o item.");
+        if (error.response?.status >= 400 && error.response?.status < 500) {
+          noty.error("Ocorreu um erro ao editar o item.");
         }
       } finally {
         setLoadingEditItem(false);
@@ -117,7 +119,7 @@ const EditItem = () => {
   return (
     <div className="container-edit-item">
       <button className="btn-back" onClick={() => navigate("/")}>
-        <i class="bx bx-left-arrow-alt" style={{ color: "#FFFFFF" }}></i>
+        <i className="bx bx-left-arrow-alt" style={{ color: "#FFFFFF" }}></i>
       </button>
 
       <div className="container-edit-item__card-form">

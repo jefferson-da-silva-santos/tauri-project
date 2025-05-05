@@ -8,4 +8,3 @@ This template should help get you started developing with Tauri and React in Vit
 
 # tauri-project
 Projeto Desktop Tauri
->>>>>>> 44381b315fecc4ba4e40ca703d314d3e2ab78185

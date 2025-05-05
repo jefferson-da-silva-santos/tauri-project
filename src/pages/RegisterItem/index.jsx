@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -13,6 +13,8 @@ import "primereact/resources/primereact.min.css";
 import { formatDataItemRegister } from "../../utils/formatt/dataFormatItemRegister";
 import api from "../../api/api";
 import useNoty from "../../hooks/useNoty";
+import { handleOnKeyDown } from "../../utils/inputValue/handleOnKeyDown";
+
 const RegisterItem = () => {
   const navigate = useNavigate();
   const noty = useNoty();
@@ -31,7 +33,7 @@ const RegisterItem = () => {
     { label: "L", value: "L" },
     { label: "ML", value: "ML" },
     { label: "CX", value: "CX" },
-    { label: "PC", value: "PC" }
+    { label: "PC", value: "PC" },
   ];
 
   const formik = useFormik({
@@ -39,7 +41,8 @@ const RegisterItem = () => {
       nome: "",
       descricao: "",
       categoria: null,
-      preco: null,
+      preco: "R$ 0,00",
+      rawDigits: "",
       quantidade: null,
       unidade: null,
     },
@@ -47,7 +50,7 @@ const RegisterItem = () => {
       nome: Yup.string().required("Nome é obrigatório"),
       descricao: Yup.string().required("Descrição é obrigatória"),
       categoria: Yup.string().required("Categoria é obrigatória"),
-      preco: Yup.number().required("Preço é obrigatório").min(0),
+      preco: Yup.string().required("Preço é obrigatório"),
       quantidade: Yup.number().required("Quantidade é obrigatória").min(1),
       unidade: Yup.string().required("Unidade é obrigatória"),
     }),
@@ -65,15 +68,15 @@ const RegisterItem = () => {
         const responseData = JSON.stringify(response.data);
 
         if (!responseData) {
-          noty.error("Ocorreu um erro inesperado.");
+          noty.error("Ocorreu um erro inesperado. Tente novamente mais tarde.");
           return;
         }
 
         noty.success("Item cadastrado com sucesso!");
-          resetForm();
+        resetForm();
       } catch (error) {
         if (error.status >= 500 && error.status < 600) {
-          noty.error("Ocorreu um erro inesperado.");
+          noty.error("Ocorreu um erro inesperado. Tente novamente mais tarde.");
         }
 
         if (error.status >= 400 && error.status < 500) {
@@ -82,8 +85,6 @@ const RegisterItem = () => {
 
         console.error("Erro ao cadastrar item:", error);
       }
-
-
     },
   });
 
@@ -165,15 +166,17 @@ const RegisterItem = () => {
           </div>
 
           {/* Preço */}
+          {/* Preço com centavos dinâmicos */}
           <div className="container-register-item__card-form--form__group">
             <label htmlFor="preco">Preço</label>
-            <InputNumber
+            <input
               id="preco"
               name="preco"
+              type="text"
               value={formik.values.preco}
-              onValueChange={(e) => formik.setFieldValue("preco", e.value)}
+              onKeyDown={(e) => handleOnKeyDown(e, formik)}
+              onChange={() => {}}
               onBlur={formik.handleBlur}
-              mode="currency"
               placeholder="Ex. R$ 2,00"
               currency="BRL"
               locale="pt-BR"

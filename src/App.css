@@ -8,6 +8,20 @@
   padding: 0;
 }
 
+.container-input-teste {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  .input-teste {
+    padding: 1rem;
+    width: 30rem;
+    font-size: 4rem;
+  }
+}
+
 @keyframes loading {
   0% {
     transform: translateY(-100%);

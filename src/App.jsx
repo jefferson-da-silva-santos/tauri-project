@@ -8,6 +8,7 @@ import EditItem from "./pages/EditItem";
 import Paymant from "./pages/Paymant";
 import ConfirmEmail from "./pages/ConfirmEmail";
 import ReportProvider from "./context/Report/ReportProvider";
+import InputValue from "./pages/TestesPages/InputValue";
 function App() {
   return (
     <>
@@ -22,6 +23,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/payment" element={<Paymant />} />
             <Route path="/confirmEmail" element={<ConfirmEmail />} />
+            <Route path="/testInput" element={<InputValue />} />
           </Routes>
         </ReportProvider>
       </BrowserRouter>

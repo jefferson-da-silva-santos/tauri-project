@@ -13,6 +13,9 @@ import "primereact/resources/primereact.min.css";
 import api from "../../api/api";
 import useNoty from "../../hooks/useNoty";
 import { formatNumber } from "../../utils/formatt/formatNumber";
+import { formatDataItemRegister } from "../../utils/formatt/dataFormatItemRegister";
+import { handleOnKeyDown } from "../../utils/inputValue/handleOnKeyDown";
+import { formatarParaBRL } from "../../utils/formatt/formatCurrencyBR";
 // import "primeicons/primeicons.css";
 
 const EditItem = () => {
@@ -44,7 +47,7 @@ const EditItem = () => {
       nome: "",
       descricao: "",
       categoria: null,
-      preco: null,
+      preco: "R$ 0,00",
       quantidade: null,
       unidade: null,
     },
@@ -53,7 +56,7 @@ const EditItem = () => {
       nome: Yup.string().required("Nome é obrigatório"),
       descricao: Yup.string().required("Descrição é obrigatória"),
       categoria: Yup.string().required("Categoria é obrigatória"),
-      preco: Yup.number().required("Preço é obrigatório").min(0),
+      preco: Yup.string().required("Preço é obrigatório"),
       quantidade: Yup.number().required("Quantidade é obrigatória").min(1),
       unidade: Yup.string().required("Unidade é obrigatória"),
     }),
@@ -61,8 +64,7 @@ const EditItem = () => {
       console.log("Entrou na função de submissão");
       try {
         setLoadingEditItem(true);
-        const data = formatDataItemRegister(values);
-        console.log("Data para editar:", data);
+        const data = formatDataItemRegister(values);;
         const response = await api.put(
           `/Products/Update?id=${values.id}`,
           data
@@ -74,11 +76,11 @@ const EditItem = () => {
         }
       } catch (error) {
         if (error.response?.status >= 500 && error.response?.status < 600) {
-          noty.error("Ocorreu um erro inesperado.");
+          noty.error("Ocorreu um erro inesperado. Tente novamente mais tarde.");
         }
 
         if (error.response?.status >= 400 && error.response?.status < 500) {
-          noty.error("Ocorreu um erro ao editar o item.");
+          noty.error("Ocorreu um erro inesperado. Tente novamente mais tarde.");
         }
       } finally {
         setLoadingEditItem(false);
@@ -100,12 +102,13 @@ const EditItem = () => {
       formik.setFieldValue("nome", response.data.name);
       formik.setFieldValue("descricao", response.data.description);
       formik.setFieldValue("categoria", response.data.category);
-      formik.setFieldValue("preco", response.data.price);
+      formik.setFieldValue("preco", formatarParaBRL(response.data.price));
+    
       formik.setFieldValue("quantidade", response.data.quantity);
       formik.setFieldValue("unidade", response.data.unity);
     } catch (error) {
       if (error.status >= 500 && error.status < 600) {
-        noty.error("Ocorreu um erro inesperado.");
+        noty.error("Ocorreu um erro inesperado. Tente novamente mais tarde.");
       }
 
       if (error.status >= 400 && error.status < 500) {
@@ -218,13 +221,17 @@ const EditItem = () => {
           </div>
 
           {/* Preço */}
+          {/* Preço com centavos dinâmicos */}
           <div className="container-edit-item__card-form--form__group">
             <label htmlFor="preco">Preço</label>
-            <InputNumber
+            <input
               id="preco"
+              type="text"
               name="preco"
               value={formik.values.preco}
-              onValueChange={(e) => formik.setFieldValue("preco", e.value)}
+              onKeyDown={(e) => handleOnKeyDown(e, formik)}
+              onChange={() => {}}
+              placeholder="Ex. R$ 2,00"
               onBlur={formik.handleBlur}
               mode="currency"
               currency="BRL"

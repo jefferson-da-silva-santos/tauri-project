@@ -9,6 +9,6 @@ export function formatarMensagemDeErro(erroObj) {
         return "Ocorreu um erro ao processar sua requisição. Por favor, tente novamente.";
     }
   } else {
-    return "Ocorreu um erro inesperado.";
+    return "Ocorreu um erro inesperado. Tente novamente mais tarde.";
   }
 }

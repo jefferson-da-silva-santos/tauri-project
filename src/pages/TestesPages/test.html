@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Input de Centavos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+    }
+    label {
+      font-weight: bold;
+    }
+    input {
+      font-size: 2rem;
+      width: 300px;
+      padding: 0.5rem;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <label for="moneyInput">Preço</label><br>
+  <input type="text" id="moneyInput" readonly value="R$ 0,00" />
+
+  <script>
+    const input = document.getElementById('moneyInput');
+    let rawValue = ""; // Armazena só os dígitos
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key.match(/^[0-9]$/)) {
+        rawValue += e.key;
+      } else if (e.key === 'Backspace') {
+        rawValue = rawValue.slice(0, -1);
+      } else {
+        // Impede qualquer outra tecla
+        e.preventDefault();
+        return;
+      }
+
+      // Impede scroll do input
+      e.preventDefault();
+
+      updateDisplay();
+    });
+
+    function updateDisplay() {
+      const numericValue = Number(rawValue);
+      const formatted = (numericValue / 100).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+      input.value = formatted;
+    }
+  </script>
+</body>
+</html>

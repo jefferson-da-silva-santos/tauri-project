@@ -20,7 +20,13 @@ const ReportProvider = ({ children }) => {
       }
       noty.success("Relatório gerado com sucesso!");
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status >= 400 && error.response.status < 500) {
+        noty.error("Houve um erro na geração do relatório!");
+      } else if (error.response && error.response.status >= 500 && error.response.status < 600) {
+        noty.error("Houve um erro inesperado, tente novamente mais tarde");
+      } else {
+        noty.error("Erro ao gerar o relatório.");
+      }
     } finally {
       setLoading(false);
     }

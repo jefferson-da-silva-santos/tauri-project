@@ -1,11 +1,23 @@
-import React, {useState } from "react";
+import React, {useEffect, useState } from "react";
 import useApi from "../../hooks/useApi";
 import { ProgressSpinner } from "primereact/progressspinner";
 import DownloadTicketButton from "../../components/DownloadTicketButton";
 import useNoty from "../../hooks/useNoty";
+import { useNavigate } from "react-router-dom";
 const Paymant = () => {
   const noty = useNoty();
   const [isPaymentFinished, setIsPaymentFinished] = useState(false);
+  const navigate = useNavigate();
+  const [signedIn, setSignedIn] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem('@Auth:user')) {
+      setSignedIn(true);
+    }
+  });
+
+  if (signedIn) {
+    navigate('/home');
+  }
 
   const { loading: loadingPayment, requestAPI: requestAPIPayment } = useApi(
     null,

@@ -1,19 +1,70 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useApi from "../../hooks/useApi";
 import { ProgressSpinner } from "primereact/progressspinner";
 import DownloadTicketButton from "../../components/DownloadTicketButton";
 import useNoty from "../../hooks/useNoty";
 import { useNavigate } from "react-router-dom";
+
 const Paymant = () => {
   const noty = useNoty();
   const [isPaymentFinished, setIsPaymentFinished] = useState(false);
+  const [paymentButtonDisabled, setPaymentButtonDisabled] = useState(false);
   const navigate = useNavigate();
   const [signedIn, setSignedIn] = useState(false);
+
+  const planos = [
+    {
+      nome: "Bronze",
+      nivel: "Bronze",
+      beneficios: [
+        "Gestão de Estoque",
+        "Cadastro de Itens",
+        "Relatórios Simples",
+        "Suporte por E-mail",
+        "Acesso para 1 Usuário",
+      ],
+      classeBotao: "btn1",
+    },
+    {
+      nome: "Prata",
+      nivel: "Prata",
+      beneficios: [
+        "Todos os benefícios do Plano Bronze",
+        "Gestão de Múltiplos Estoques",
+        "Alertas de Estoque Mínimo",
+        "Relatórios Personalizados",
+        "Suporte prioritário",
+        "Acesso para até 3 Usuários",
+      ],
+      classeBotao: "btn2",
+    },
+    {
+      nome: "Gold",
+      nivel: "Ouro",
+      beneficios: [
+        "Todos os benefícios do Plano Prata",
+        "Análise preditiva de estoque",
+        "Integração com outras plataformas",
+        "Relatórios avançados e gráficos",
+        "Suporte 24/7",
+        "Acesso para usuários ilimitados",
+      ],
+      classeBotao: "btn3",
+    },
+  ];
+
   useEffect(() => {
-    if (localStorage.getItem('@Auth:user')) {
+    if (localStorage.getItem("@Auth:user")) {
       setSignedIn(true);
     }
-  });
+  }, []);
+
+  useEffect(() => {
+    // Se o pagamento foi finalizado, desativa os botões
+    if (isPaymentFinished) {
+      setPaymentButtonDisabled(true);
+    }
+  }, [isPaymentFinished]);
 
   if (signedIn && !isPaymentFinished) {
     navigate("/home");
@@ -55,7 +106,6 @@ const Paymant = () => {
         return;
       }
 
-  
       // Removendo dados do localstorage
       localStorage.removeItem("@Auth:email");
       localStorage.removeItem("@Auth:idUser");
@@ -70,10 +120,11 @@ const Paymant = () => {
         new Date().getTime() + 60 * 60 * 1000
       );
 
-      noty.success("Pagamento efetuado com sucesso! Seu boleto está disponivel para download.");
+      noty.success(
+        "Pagamento efetuado com sucesso! Seu boleto está disponivel para download."
+      );
       setIsPaymentFinished(true);
       // navigate("/");
-
     } catch (error) {
       // Tratamento de erros
       if (error && (error.status === 400 || error.status === 404)) {
@@ -87,9 +138,7 @@ const Paymant = () => {
 
   return (
     <div className="container-payment">
-      {isPaymentFinished && (
-        <DownloadTicketButton redirect={true} route="/"/>
-      )}
+      {isPaymentFinished && <DownloadTicketButton redirect={true} route="/" />}
       <div
         className="loading-payment"
         style={{ display: loadingPayment ? "flex" : "none" }}
@@ -99,143 +148,36 @@ const Paymant = () => {
         />
       </div>
       <header className="header-payment">
-        <h1 className="header-payment__title">Esculha o seu plano</h1>
+        <h1 className="header-payment__title">Escolha o seu plano</h1>
       </header>
       <main className="main-payment">
-        <article className="main-payment__flat bronze">
-          <h3 className="main-payment__flat__title">Plano Bronze</h3>
-          <ul className="main-payment__flat__list">
-            <li className="main-payment__flat__list__item">
-              Gestão de Estoque
-            </li>
-            <li className="main-payment__flat__list__item">
-              Cadastro de Itens
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Simples
-            </li>
-            <li className="main-payment__flat__list__item">
-              Suporte por E-mail
-            </li>
-            <li className="main-payment__flat__list__item">
-              Acesso para 1 Usuário
-            </li>
-          </ul>
-          <button
-            onClick={() => {
-              handleClick("Bronze");
-            }}
-            className="main-payment__flat__button btn1"
+        {planos.map((plano) => (
+          <article
+            key={plano.nivel}
+            className={`main-payment__flat ${plano.nivel.toLowerCase()}`}
           >
-            Efetuar Pagamento
-          </button>
-        </article>
-
-        <article className="main-payment__flat prata">
-          <h3 className="main-payment__flat__title">Plano Prata</h3>
-          <ul className="main-payment__flat__list">
-            <li className="main-payment__flat__list__item">
-              Todos os benef. do Bronze.
-            </li>
-            <li className="main-payment__flat__list__item">
-              Gestão de Múltiplos Estoque{" "}
-            </li>
-            <li className="main-payment__flat__list__item">
-              Alertas de Estoque Mínimo
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-          </ul>
-          <button
-            onClick={() => {
-              handleClick("Prata");
-            }}
-            className="main-payment__flat__button btn2"
-          >
-            Efetuar Pagamento
-          </button>
-        </article>
-
-        <article className="main-payment__flat">
-          <h3 className="main-payment__flat__title">Plano Gold</h3>
-          <ul className="main-payment__flat__list">
-            <li className="main-payment__flat__list__item">
-              Todos os benef. do Bronze.
-            </li>
-            <li className="main-payment__flat__list__item">
-              Gestão de Múltiplos Estoque{" "}
-            </li>
-            <li className="main-payment__flat__list__item">
-              Alertas de Estoque Mínimo
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-            <li className="main-payment__flat__list__item">
-              Relatórios Personalizados
-            </li>
-          </ul>
-          <button
-            onClick={() => {
-              handleClick("Ouro");
-            }}
-            className="main-payment__flat__button btn3"
-          >
-            Efetuar Pagamento
-          </button>
-        </article>
+            <h3 className="main-payment__flat__title">{plano.nome}</h3>
+            <ul className="main-payment__flat__list">
+              {plano.beneficios.map((beneficio, index) => (
+                <li
+                  key={`${plano.nivel}-${index}`}
+                  className="main-payment__flat__list__item"
+                >
+                  {beneficio}
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={() => {
+                handleClick(plano.nivel);
+              }}
+              className={`main-payment__flat__button ${plano.classeBotao}`}
+              disabled={paymentButtonDisabled}
+            >
+              Efetuar Pagamento
+            </button>
+          </article>
+        ))}
       </main>
     </div>
   );

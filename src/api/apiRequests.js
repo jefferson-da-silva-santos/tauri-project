@@ -3,6 +3,7 @@ import { formatarParaBRL } from "../utils/formatt/formatCurrencyBR";
 import { formatarMensagemDeErro } from "../utils/formatt/formatErrorMensager";
 import api from "./api";
 
+/* função para pegar um item especifico pelo id */
 export async function requestGetItem(id, formik, setLoadingGetItem, noty) {
   try {
     setLoadingGetItem(true);
@@ -34,6 +35,7 @@ export async function requestGetItem(id, formik, setLoadingGetItem, noty) {
   }
 }
 
+/* função para deletar um item especifico pelo id */
 export async function requestDeleteItem(id, setLoadingDeleteItem, noty) {
   try {
     setLoadingDeleteItem(true);
@@ -52,6 +54,7 @@ export async function requestDeleteItem(id, setLoadingDeleteItem, noty) {
   }
 }
 
+/* função para editar um item especifico pelo id */
 export async function requestEditItem (values, resetForm, setLoadingEditItem, noty) {
   try {
     setLoadingEditItem(true);
@@ -78,6 +81,7 @@ export async function requestEditItem (values, resetForm, setLoadingEditItem, no
   }
 }
 
+/* função para cadastrar um item novo */
 export const requestRegister = async (values, navigate, noty, registerRequestAPI) => {
   try {
     const response = await registerRequestAPI(values);

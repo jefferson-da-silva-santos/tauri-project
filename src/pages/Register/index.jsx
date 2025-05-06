@@ -7,14 +7,15 @@ import { useNavigate } from "react-router-dom";
 import useApi from "../../hooks/useApi";
 import { formatDataRegister } from "../../utils/formatt/formatDataRegister";
 import { shemaRegister } from "../../utils/validate/shemaRegister";
-import { formatarMensagemDeErro } from "../../utils/formatt/formatErrorMensager";
 import { ProgressSpinner } from "primereact/progressspinner";
 import useNoty from "../../hooks/useNoty";
+import { requestRegister } from "../../api/apiRequests";
 
 const Register = () => {
   const noty = useNoty();
   const navigate = useNavigate();
   const [signedIn, setSignedIn] = useState(false);
+  
   useEffect(() => {
     if (localStorage.getItem('@Auth:user')) {
       setSignedIn(true);
@@ -34,41 +35,12 @@ const Register = () => {
   };
   const validationSchema = shemaRegister;
   const {
-    data: registerData,
-    error: registerError,
     loading: registerLoading,
     requestAPI: registerRequestAPI,
   } = useApi("/Auth/register", "POST");
-
-  const requestRegister = async (values) => {
-    try {
-      const response = await registerRequestAPI(values);
-
-      if (response.sucess) {
-        noty.success(response.message);
-        localStorage.setItem("@Auth:idUser", response.id);
-        localStorage.setItem('@Auth:email', values.email);
-        localStorage.setItem('@Auth:password', values.password)
-        localStorage.setItem("@Confirm:tokenEmailConfirm", response.tokenConfirmEmail);
-        navigate("/confirmEmail");
-        return;
-      }
-
-      noty.error(formatarMensagemDeErro(response));
-    } catch (error) {
-      if (error && error.status === 400) {
-        console.log(error);
-        noty.error(error.response.data);
-      }
-      if (error && error.status === 500) {
-        noty.error("Houve um erro inesperado, tente novamente mais tarde");
-      }
-    }
-  };
-
   const handleSubmit = (values) => {
     const data = formatDataRegister(values);
-    requestRegister(data);
+    requestRegister(data, navigate, noty, registerRequestAPI);
   };
 
   return (

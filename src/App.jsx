@@ -9,22 +9,25 @@ import Paymant from "./pages/Paymant";
 import ConfirmEmail from "./pages/ConfirmEmail";
 import ReportProvider from "./context/Report/ReportProvider";
 import InputValue from "./pages/TestesPages/InputValue";
+import { ThemeProvider } from "./context/ThemeContext";
 function App() {
   return (
     <>
       <BrowserRouter>
         <ReportProvider>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/registerItem" element={<RegisterItem />} />
-            <Route path="/editItem" element={<EditItem />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/payment" element={<Paymant />} />
-            <Route path="/confirmEmail" element={<ConfirmEmail />} />
-            <Route path="/testInput" element={<InputValue />} />
-          </Routes>
+          <ThemeProvider>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/registerItem" element={<RegisterItem />} />
+              <Route path="/editItem" element={<EditItem />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/payment" element={<Paymant />} />
+              <Route path="/confirmEmail" element={<ConfirmEmail />} />
+              <Route path="/testInput" element={<InputValue />} />
+            </Routes>
+          </ThemeProvider>
         </ReportProvider>
       </BrowserRouter>
     </>

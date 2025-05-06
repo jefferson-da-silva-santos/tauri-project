@@ -1,28 +1,38 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import * as Yup from "yup";
-
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
-import api from "../../api/api";
 import useNoty from "../../hooks/useNoty";
 import { formatNumber } from "../../utils/formatt/formatNumber";
-import { formatDataItemRegister } from "../../utils/formatt/dataFormatItemRegister";
 import { handleOnKeyDown } from "../../utils/inputValue/handleOnKeyDown";
-import { formatarParaBRL } from "../../utils/formatt/formatCurrencyBR";
-// import "primeicons/primeicons.css";
+import {
+  requestEditItem,
+  requestGetItem,
+} from "../../api/apiRequests";
+import { validateDataEdit } from "../../utils/validate/validateDataEdit";
+import DialogBox from "../../components/Dialog";
 
 const EditItem = () => {
   const noty = useNoty();
   const navigate = useNavigate();
   const [loadingGetItem, setLoadingGetItem] = useState(false);
   const [loadingEditItem, setLoadingEditItem] = useState(false);
+  const [loadingDeleteItem, setLoadingDeleteItem] = useState(false);
+
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleClickOpenDialog = (id) => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const categoryOptions = [
     { label: "Alimentos", value: "Alimentos" },
@@ -51,76 +61,21 @@ const EditItem = () => {
       quantidade: null,
       unidade: null,
     },
-    validationSchema: Yup.object({
-      id: Yup.number().required("ID é obrigatório"),
-      nome: Yup.string().required("Nome é obrigatório"),
-      descricao: Yup.string().required("Descrição é obrigatória"),
-      categoria: Yup.string().required("Categoria é obrigatória"),
-      preco: Yup.string().required("Preço é obrigatório"),
-      quantidade: Yup.number().required("Quantidade é obrigatória").min(1),
-      unidade: Yup.string().required("Unidade é obrigatória"),
-    }),
+    validationSchema: validateDataEdit,
     onSubmit: async (values, { resetForm }) => {
-      console.log("Entrou na função de submissão");
-      try {
-        setLoadingEditItem(true);
-        const data = formatDataItemRegister(values);;
-        const response = await api.put(
-          `/Products/Update?id=${values.id}`,
-          data
-        );
-
-        if (response) {
-          noty.success("Item editado com sucesso!");
-          resetForm();
-        }
-      } catch (error) {
-        if (error.response?.status >= 500 && error.response?.status < 600) {
-          noty.error("Ocorreu um erro inesperado. Tente novamente mais tarde.");
-        }
-
-        if (error.response?.status >= 400 && error.response?.status < 500) {
-          noty.error("Ocorreu um erro inesperado. Tente novamente mais tarde.");
-        }
-      } finally {
-        setLoadingEditItem(false);
-      }
+      requestEditItem(values, resetForm, setLoadingEditItem, noty);
     },
   });
 
-  async function requestGetItem(id) {
-    try {
-      setLoadingGetItem(true);
-      const response = await api.get(`/Products/GetId?id=${id}`);
-      if (!response.data) {
-        noty.error("Nenhum item encontrado com esse ID.");
-        return;
-      }
-
-      noty.success("Item carregado com sucesso!");
-      formik.setFieldValue("id", response.data.id);
-      formik.setFieldValue("nome", response.data.name);
-      formik.setFieldValue("descricao", response.data.description);
-      formik.setFieldValue("categoria", response.data.category);
-      formik.setFieldValue("preco", formatarParaBRL(response.data.price));
-    
-      formik.setFieldValue("quantidade", response.data.quantity);
-      formik.setFieldValue("unidade", response.data.unity);
-    } catch (error) {
-      if (error.status >= 500 && error.status < 600) {
-        noty.error("Ocorreu um erro inesperado. Tente novamente mais tarde.");
-      }
-
-      if (error.status >= 400 && error.status < 500) {
-        noty.error("Ocorreu um erro ao cadastrar o item.");
-      }
-    } finally {
-      setLoadingGetItem(false);
-    }
-  }
-
   return (
     <div className="container-edit-item">
+      <DialogBox
+        formik={formik}
+        openDialog={openDialog}
+        handleCloseDialog={handleCloseDialog}
+        setLoadingDeleteItem={setLoadingDeleteItem}
+        noty={noty}
+      />
       <button className="btn-back" onClick={() => navigate("/")}>
         <i className="bx bx-left-arrow-alt" style={{ color: "#FFFFFF" }}></i>
       </button>
@@ -148,7 +103,12 @@ const EditItem = () => {
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  requestGetItem(formatNumber(e.target.value));
+                  requestGetItem(
+                    formatNumber(e.target.value),
+                    formik,
+                    setLoadingGetItem,
+                    noty
+                  );
                 }
               }}
               className={
@@ -293,17 +253,21 @@ const EditItem = () => {
           <div className="group-buttons">
             <Button
               type="submit"
-              label="Salvar Alterações"
+              label={loadingEditItem ? "Salvando..." : "Salvar Alterações"}
+              disabled={loadingEditItem || loadingDeleteItem || loadingGetItem}
               className="container-edit-item__card-form--form__button"
               icon="pi pi-check"
             />
             <Button
               type="button"
-              label="Deletar Item"
+              label={loadingDeleteItem ? "Excluindo..." : "Excluir"}
               severity="danger"
+              disabled={loadingEditItem || loadingDeleteItem || loadingGetItem}
               icon="pi pi-trash"
               className="container-edit-item__card-form--form__button btn-rm"
-              onClick={() => alert("Confirma exclusão?")}
+              onClick={() => {
+                handleClickOpenDialog(formik.values.id);
+              }}
             />
           </div>
         </form>

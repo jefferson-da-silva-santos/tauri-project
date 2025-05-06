@@ -52,16 +52,15 @@ const Login = () => {
 
       
     } catch (error) {
-      if (error && error.status === 401) {
+      if (error && error.status >= 400 && error.status < 500) {
         noty.error('E-mail ou senha inválidos');
         return;
       }
 
-      if (error && error.status === 500) {
+      if (error && error.status >= 500 && error.status < 600) {
         noty.error('Houve um erro inesperado, tente novamente mais tarde');
         return;
       }
-
     }
   };
 

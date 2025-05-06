@@ -2,22 +2,26 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import { formatDataItemRegister } from "../../utils/formatt/dataFormatItemRegister";
 import api from "../../api/api";
 import useNoty from "../../hooks/useNoty";
 import { handleOnKeyDown } from "../../utils/inputValue/handleOnKeyDown";
+import { useTheme } from "../../hooks/useTheme";
+import { temaEstilos } from "../../utils/styles/themeStyles";
 
 const RegisterItem = () => {
   const navigate = useNavigate();
   const noty = useNoty();
+  const { darkMode } = useTheme();
+  const tema = darkMode ? temaEstilos.escuro : temaEstilos.claro;
+  const inputStyle = darkMode ? { boxShadow: temaEstilos.escuro.boxShadow, backgroundColor: temaEstilos.escuro.backgroundColorSecundaria, color: temaEstilos.escuro.textColor, borderColor: temaEstilos.escuro.border.split(' ')[2] } : {};
+  const dropdownStyle = darkMode ? { backgroundColor: temaEstilos.escuro.backgroundColorSecundaria, color: temaEstilos.escuro.textColor, borderColor: temaEstilos.escuro.border.split(' ')[2] } : {};
 
   const categoryOptions = [
     { label: "Alimentos", value: "Alimentos" },
@@ -89,13 +93,13 @@ const RegisterItem = () => {
   });
 
   return (
-    <div className="container-register-item">
-      <button className="btn-back" onClick={() => navigate("/")}>
+    <div className="container-register-item" style={{ backgroundColor: tema.backgroundColorPrimaria }}>
+      <button style={{ boxShadow: tema.boxShadow }} className="btn-back" onClick={() => navigate("/")}>
         <i className="bx bx-left-arrow-alt" style={{ color: "#FFFFFF" }}></i>
       </button>
 
-      <div className="container-register-item__card-form">
-        <h1 className="container-register-item__card-form--title">
+      <div className="container-register-item__card-form" style={{ backgroundColor: tema.backgroundColorSecundaria, boxShadow: tema.boxShadow }}>
+        <h1 className="container-register-item__card-form--title" style={{ color: tema.textColor }}>
           Cadastrar Item
         </h1>
 
@@ -105,7 +109,7 @@ const RegisterItem = () => {
         >
           {/* Nome */}
           <div className="container-register-item__card-form--form__group">
-            <label htmlFor="nome">Nome</label>
+            <label htmlFor="nome" style={{ color: tema.textColor }}>Nome</label>
             <InputText
               id="nome"
               name="nome"
@@ -116,6 +120,7 @@ const RegisterItem = () => {
               className={
                 formik.touched.nome && formik.errors.nome ? "p-invalid" : ""
               }
+              style={inputStyle}
             />
             {formik.touched.nome && formik.errors.nome && (
               <small className="p-error">{formik.errors.nome}</small>
@@ -124,7 +129,7 @@ const RegisterItem = () => {
 
           {/* Descrição */}
           <div className="container-register-item__card-form--form__group">
-            <label htmlFor="descricao">Descrição</label>
+            <label htmlFor="descricao" style={{ color: tema.textColor }}>Descrição</label>
             <InputText
               id="descricao"
               name="descricao"
@@ -137,6 +142,7 @@ const RegisterItem = () => {
                   ? "p-invalid"
                   : ""
               }
+              style={inputStyle}
             />
             {formik.touched.descricao && formik.errors.descricao && (
               <small className="p-error">{formik.errors.descricao}</small>
@@ -145,7 +151,7 @@ const RegisterItem = () => {
 
           {/* Categoria */}
           <div className="container-register-item__card-form--form__group">
-            <label htmlFor="categoria">Categoria</label>
+            <label htmlFor="categoria" style={{ color: tema.textColor }}>Categoria</label>
             <Dropdown
               id="categoria"
               name="categoria"
@@ -159,6 +165,7 @@ const RegisterItem = () => {
                   ? "p-invalid"
                   : ""
               }
+              style={dropdownStyle}
             />
             {formik.touched.categoria && formik.errors.categoria && (
               <small className="p-error">{formik.errors.categoria}</small>
@@ -168,14 +175,14 @@ const RegisterItem = () => {
           {/* Preço */}
           {/* Preço com centavos dinâmicos */}
           <div className="container-register-item__card-form--form__group">
-            <label htmlFor="preco">Preço</label>
+            <label htmlFor="preco" style={{ color: tema.textColor }}>Preço</label>
             <input
               id="preco"
-              name="preco"
               type="text"
+              name="preco"
               value={formik.values.preco}
               onKeyDown={(e) => handleOnKeyDown(e, formik)}
-              onChange={() => {}}
+              onChange={() => { }}
               onBlur={formik.handleBlur}
               placeholder="Ex. R$ 2,00"
               currency="BRL"
@@ -183,6 +190,7 @@ const RegisterItem = () => {
               className={
                 formik.touched.preco && formik.errors.preco ? "p-invalid" : ""
               }
+              style={inputStyle}
             />
             {formik.touched.preco && formik.errors.preco && (
               <small className="p-error">{formik.errors.preco}</small>
@@ -191,7 +199,7 @@ const RegisterItem = () => {
 
           {/* Quantidade */}
           <div className="container-register-item__card-form--form__group">
-            <label htmlFor="quantidade">Quantidade</label>
+            <label htmlFor="quantidade" style={{ color: tema.textColor }}>Quantidade</label>
             <InputNumber
               id="quantidade"
               name="quantidade"
@@ -200,12 +208,14 @@ const RegisterItem = () => {
               onBlur={formik.handleBlur}
               showButtons
               placeholder="Ex. 12"
-              min={0}
+              min={1}
               className={
                 formik.touched.quantidade && formik.errors.quantidade
                   ? "p-invalid"
                   : ""
               }
+              inputStyle={inputStyle}
+              style={{ width: '100%' }}
             />
             {formik.touched.quantidade && formik.errors.quantidade && (
               <small className="p-error">{formik.errors.quantidade}</small>
@@ -214,7 +224,7 @@ const RegisterItem = () => {
 
           {/* Unidade */}
           <div className="container-register-item__card-form--form__group">
-            <label htmlFor="unidade">Unidade</label>
+            <label htmlFor="unidade" style={{ color: tema.textColor }}>Unidade</label>
             <Dropdown
               id="unidade"
               name="unidade"
@@ -228,6 +238,7 @@ const RegisterItem = () => {
                   ? "p-invalid"
                   : ""
               }
+              style={dropdownStyle}
             />
             {formik.touched.unidade && formik.errors.unidade && (
               <small className="p-error">{formik.errors.unidade}</small>

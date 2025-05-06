@@ -16,6 +16,8 @@ import {
 } from "../../api/apiRequests";
 import { validateDataEdit } from "../../utils/validate/validateDataEdit";
 import DialogBox from "../../components/Dialog";
+import { temaEstilos } from "../../utils/styles/themeStyles";
+import { useTheme } from "../../hooks/useTheme";
 
 const EditItem = () => {
   const noty = useNoty();
@@ -23,8 +25,12 @@ const EditItem = () => {
   const [loadingGetItem, setLoadingGetItem] = useState(false);
   const [loadingEditItem, setLoadingEditItem] = useState(false);
   const [loadingDeleteItem, setLoadingDeleteItem] = useState(false);
+  const { darkMode } = useTheme();
+  const tema = darkMode ? temaEstilos.escuro : temaEstilos.claro;
+  const inputStyle = darkMode ? { boxShadow: temaEstilos.escuro.boxShadow, backgroundColor: temaEstilos.escuro.backgroundColorSecundaria, color: temaEstilos.escuro.textColor, borderColor: temaEstilos.escuro.border.split(' ')[2] } : {};
+  const dropdownStyle = darkMode ? { backgroundColor: temaEstilos.escuro.backgroundColorSecundaria, color: temaEstilos.escuro.textColor, borderColor: temaEstilos.escuro.border.split(' ')[2] } : {};
 
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleClickOpenDialog = (id) => {
     setOpenDialog(true);
@@ -68,7 +74,7 @@ const EditItem = () => {
   });
 
   return (
-    <div className="container-edit-item">
+    <div className="container-edit-item" style={{ backgroundColor: tema.backgroundColorPrimaria }}>
       <DialogBox
         formik={formik}
         openDialog={openDialog}
@@ -76,12 +82,12 @@ const EditItem = () => {
         setLoadingDeleteItem={setLoadingDeleteItem}
         noty={noty}
       />
-      <button className="btn-back" onClick={() => navigate("/")}>
+      <button style={{ boxShadow: tema.boxShadow }} className="btn-back" onClick={() => navigate("/")}>
         <i className="bx bx-left-arrow-alt" style={{ color: "#FFFFFF" }}></i>
       </button>
 
-      <div className="container-edit-item__card-form">
-        <h1 className="container-edit-item__card-form--title">Editar Item</h1>
+      <div style={{ backgroundColor: tema.backgroundColorSecundaria, boxShadow: tema.boxShadow }} className="container-edit-item__card-form">
+        <h1 style={{ color: tema.textColor }} className="container-edit-item__card-form--title">Editar Item</h1>
 
         <form
           onSubmit={formik.handleSubmit}
@@ -89,7 +95,7 @@ const EditItem = () => {
         >
           {/* ID */}
           <div className="container-edit-item__card-form--form__group group-id">
-            <label htmlFor="id">Id</label>
+            <label style={{ color: tema.textColor }} htmlFor="id">Id</label>
             <InputNumber
               id="id"
               name="id"
@@ -100,6 +106,8 @@ const EditItem = () => {
               onBlur={formik.handleBlur}
               showButtons
               min={1}
+              inputStyle={inputStyle} // Aplicando ao input interno
+              style={{ width: '100%' }} // Garantindo que o container não limite a largura
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
@@ -122,13 +130,14 @@ const EditItem = () => {
 
           {/* Nome */}
           <div className="container-edit-item__card-form--form__group">
-            <label htmlFor="nome">Nome</label>
+            <label style={{ color: tema.textColor }} htmlFor="nome">Nome</label>
             <InputText
               id="nome"
               name="nome"
               value={formik.values.nome}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              style={inputStyle} // Já estava correto para InputText
               className={
                 formik.touched.nome && formik.errors.nome ? "p-invalid" : ""
               }
@@ -140,13 +149,14 @@ const EditItem = () => {
 
           {/* Descrição */}
           <div className="container-edit-item__card-form--form__group">
-            <label htmlFor="descricao">Descrição</label>
+            <label style={{ color: tema.textColor }} htmlFor="descricao">Descrição</label>
             <InputText
               id="descricao"
               name="descricao"
               value={formik.values.descricao}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              style={inputStyle} // Já estava correto para InputText
               className={
                 formik.touched.descricao && formik.errors.descricao
                   ? "p-invalid"
@@ -160,7 +170,7 @@ const EditItem = () => {
 
           {/* Categoria */}
           <div className="container-edit-item__card-form--form__group">
-            <label htmlFor="categoria">Categoria</label>
+            <label style={{ color: tema.textColor }} htmlFor="categoria">Categoria</label>
             <Dropdown
               id="categoria"
               name="categoria"
@@ -169,6 +179,7 @@ const EditItem = () => {
               onChange={(e) => formik.setFieldValue("categoria", e.value)}
               onBlur={formik.handleBlur}
               placeholder="Selecione uma categoria"
+              style={dropdownStyle} // Já estava correto para Dropdown
               className={
                 formik.touched.categoria && formik.errors.categoria
                   ? "p-invalid"
@@ -183,19 +194,20 @@ const EditItem = () => {
           {/* Preço */}
           {/* Preço com centavos dinâmicos */}
           <div className="container-edit-item__card-form--form__group">
-            <label htmlFor="preco">Preço</label>
+            <label style={{ color: tema.textColor }} htmlFor="preco">Preço</label>
             <input
               id="preco"
               type="text"
               name="preco"
               value={formik.values.preco}
               onKeyDown={(e) => handleOnKeyDown(e, formik)}
-              onChange={() => {}}
+              onChange={() => { }}
               placeholder="Ex. R$ 2,00"
               onBlur={formik.handleBlur}
               mode="currency"
               currency="BRL"
               locale="pt-BR"
+              style={inputStyle} // Já estava correto para input HTML
               className={
                 formik.touched.preco && formik.errors.preco ? "p-invalid" : ""
               }
@@ -207,7 +219,7 @@ const EditItem = () => {
 
           {/* Quantidade */}
           <div className="container-edit-item__card-form--form__group">
-            <label htmlFor="quantidade">Quantidade</label>
+            <label style={{ color: tema.textColor }} htmlFor="quantidade">Quantidade</label>
             <InputNumber
               id="quantidade"
               name="quantidade"
@@ -216,6 +228,8 @@ const EditItem = () => {
               onBlur={formik.handleBlur}
               showButtons
               min={0}
+              inputStyle={inputStyle} // Aplicando ao input interno
+              style={{ width: '100%' }} // Garantindo que o container não limite a largura
               className={
                 formik.touched.quantidade && formik.errors.quantidade
                   ? "p-invalid"
@@ -229,7 +243,7 @@ const EditItem = () => {
 
           {/* Unidade */}
           <div className="container-edit-item__card-form--form__group">
-            <label htmlFor="unidade">Unidade</label>
+            <label style={{ color: tema.textColor }} htmlFor="unidade">Unidade</label>
             <Dropdown
               id="unidade"
               name="unidade"
@@ -238,6 +252,7 @@ const EditItem = () => {
               onChange={(e) => formik.setFieldValue("unidade", e.value)}
               onBlur={formik.handleBlur}
               placeholder="Selecione uma unidade"
+              style={dropdownStyle} // Já estava correto para Dropdown
               className={
                 formik.touched.unidade && formik.errors.unidade
                   ? "p-invalid"

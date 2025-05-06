@@ -15,8 +15,8 @@ const Paymant = () => {
     }
   });
 
-  if (signedIn) {
-    navigate('/home');
+  if (signedIn && !isPaymentFinished) {
+    navigate("/home");
   }
 
   const { loading: loadingPayment, requestAPI: requestAPIPayment } = useApi(

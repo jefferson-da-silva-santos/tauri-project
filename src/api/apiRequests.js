@@ -78,7 +78,6 @@ export async function requestEditItem (values, resetForm, setLoadingEditItem, no
   }
 }
 
-
 export const requestRegister = async (values, navigate, noty, registerRequestAPI) => {
   try {
     const response = await registerRequestAPI(values);

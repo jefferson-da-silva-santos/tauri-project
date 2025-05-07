@@ -5,6 +5,7 @@ import DownloadTicketButton from "../../components/DownloadTicketButton";
 import useNoty from "../../hooks/useNoty";
 import { useNavigate } from "react-router-dom";
 
+
 const Paymant = () => {
   const noty = useNoty();
   const [isPaymentFinished, setIsPaymentFinished] = useState(false);

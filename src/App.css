@@ -715,7 +715,26 @@ a {
   width: 57px;
   height: 57px;
   border-radius: 50%;
+  cursor: pointer;
+  position: relative;
 }
+
+.container-home .header-home__button .quantity {
+  position: absolute;
+  top: -0.1rem;
+  right: -0.1rem;
+  background-color: #ff9f00;
+  border-radius: 50%;
+  width: 1.2rem;
+  height: 1.2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  color: white;
+}
+
 .container-home .header-home__button i {
   font-size: 2rem;
 }

@@ -13,6 +13,7 @@ import useNoty from "../../hooks/useNoty";
 import { InputSwitch } from "primereact/inputswitch";
 import { useTheme } from "../../hooks/useTheme";
 import { temaEstilos } from "../../utils/styles/themeStyles";
+import useCart from "../../hooks/useCart";
 
 const planosEstilos = {
   ouro: {
@@ -53,6 +54,7 @@ const Home = () => {
   const noty = useNoty();
   const { darkMode, setDarkMode } = useTheme();
   const tema = darkMode ? temaEstilos.escuro : temaEstilos.claro;
+  const {cart} = useCart();
 
   const { loading: loadingReport, requestReport } = useReport();
 
@@ -258,6 +260,7 @@ const Home = () => {
             className="header-home__button"
           >
             <i style={{ color: tema.textColor }} className="bx bx-cart-alt"></i>
+            <div className="quantity">{cart.length}</div>
           </button>
           <div
             style={{
@@ -305,10 +308,12 @@ const Home = () => {
               dataItems
                 .slice(0)
                 .reverse()
-                .map((item) => (
+                .map((item, index) => (
                   <ProductCard
-                    key={item.id}
+                    key={index}
+                    products={dataItems}
                     itemId={item.id}
+                    index={index}
                     itemImg={itemImg}
                     itemImg2={itemImg2}
                     itemTitle={item.name}

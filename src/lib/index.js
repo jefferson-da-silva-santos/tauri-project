@@ -31,6 +31,7 @@ const divisao = edge.func({
   methodName: 'Divisao'
 });
 
+
 soma({ n1: 10, n2: 5 }, function (error, result) {
   if (error) throw error;
   console.log('Resultado da Soma:', result);
@@ -58,3 +59,6 @@ divisao({ n1: 10, n2: 0 }, function (error, result) {
   }
   console.log('Resultado da Divisão (com erro tratado):', result);
 });
+
+
+export { soma, multiplicacao, subtracao, divisao };
